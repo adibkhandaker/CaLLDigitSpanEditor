@@ -1,0 +1,110 @@
+<svg width="300" height="300" viewBox="10, 80, 420, 420" overflow="visible">
+  <g id="monster_full"  class="animatable">
+  
+
+       <g id="monster_R_leg_foot"  class="animatable">
+  <ellipse 
+           id="monster_right_leg  class="animatable""
+           cx="315" cy="460" rx="15" ry="30" fill="#E7A562" stroke="#AA6A26" stroke-width="3"
+   />
+
+       <ellipse 
+           id="monster_right_foot  class="animatable""
+           cx="320" cy="480" rx="25" ry="10" fill="#E7A562" stroke="#AA6A26" stroke-width="3"
+   />
+   </g> //right leg and foot
+
+   <g id="monster_L_leg_foot"  class="animatable">
+
+         <ellipse 
+           id="monster_left_leg  class="animatable""
+           cx="250" cy="460" rx="15" ry="30" fill="#E7A562" stroke="#AA6A26" stroke-width="3"
+   />
+
+
+  <ellipse 
+           id="monster_left_foot"  class="animatable"
+           cx="245" cy="480" rx="25" ry="10" fill="#E7A562" stroke="#AA6A26" stroke-width="3"
+   />
+
+
+
+   </g> //left leg and foot
+
+   <g id= "all_but_legs"  class="animatable">
+
+
+   <g id= "monster_arms"  class="animatable">
+  
+        <g id="monster_left_arm_group" transform="rotate(50 200 380)"  class="animatable">
+ 
+   <ellipse 
+           id="monster_left_arm"  class="animatable"
+           cx="200" cy="380" rx="15" ry="60" fill="#E7A562" stroke="#AA6A26" stroke-width="3" 
+   />
+   </g> //left arm rotated
+  
+   <g id="monster_right_arm_group" transform="rotate(50 370 360)"  class="animatable">
+  <ellipse 
+           id="monster_right_arm"  class="animatable"
+           cx="370" cy="360" rx="15" ry="60" fill="#E7A562" stroke="#AA6A26" stroke-width="3"   
+   />
+
+      </g> //right arm rotated
+         </g> //both arms
+  
+  <ellipse 
+    id="monster_body"  class="animatable"
+    cx="282" cy="362" rx="80" ry="90" fill="#E7A562" stroke="#AA6A26" stroke-width="3"
+  />
+  
+  <g id="all_mouth"  class="animatable">
+  <ellipse 
+           id="monster_mouth"  class="animatable"
+           cx="282" cy="380" rx="25" ry="18" fill="#4F4747"
+      />
+  
+  <ellipse 
+           id="monster_tongue"  class="animatable"
+           cx="282" cy="391" rx="15" ry="7" fill="#FF5858"
+   />
+  
+  </g> //mouth and tongue
+  <g id= "all_eyes"  class="animatable">
+    <ellipse 
+           id="monster_left_eye"  class="animatable"
+           cx="250" cy="320" rx="20" ry="20" fill="white" stroke="black" stroke-width="2" 
+   />
+     <ellipse 
+           id="monster_right_eye"  class="animatable"
+           cx="310" cy="320" rx="20" ry="20" fill="white" stroke = "black" stroke-width="2"
+   />
+     <g id= "pupils"  class="animatable">
+     <ellipse 
+           id="monster_left_pupil"
+           cx="252" cy="320" rx="9" ry="9" fill="#4F4747" 
+   />
+  
+       <ellipse 
+           id="monster_right_pupil"  class="animatable"
+           cx="312" cy="320" rx="9" ry="9" fill="#4F4747" 
+   />
+     </g> //pupils
+  
+   </g> //eyes
+
+   <g id= "full_hat" >
+        <polygon 
+           id="party_hat"  class="animatable"
+           points="240,280, 320,280, 280,200" fill="#a562e7" 
+   />
+  
+    <ellipse 
+           id="pom_pom"  class="animatable"
+           cx="280" cy="200" rx="10" ry="10" fill="#62e7a5" 
+   />
+
+</g> //full hat
+</g> //all but legs
+</g> //everything
+</svg>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digit Span Studio</title>
+    <link href="studio.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">👾</span>
+        <span class="brand-name">Digit Span Studio</span>
+        <span class="crumb-sep" aria-hidden="true">/</span>
+        <span class="crumb">my-monster.js</span>
+      </div>
+      <div class="topbar-actions">
+        <button id="reset-code" class="btn btn-quiet" type="button">↺ Reset code</button>
+        <button id="restart-game" class="btn btn-go" type="button">▶ Restart game</button>
+      </div>
+    </header>
+
+    <main class="workspace" id="workspace">
+      <!-- Left: code editor -->
+      <section class="editor-pane" aria-label="Code editor">
+        <div class="page-header">
+          <div class="page-icon" aria-hidden="true">🎨</div>
+          <div class="page-title-row">
+            <h1 class="page-title">my-monster.js</h1>
+            <span id="live-dot" class="live-dot" title="Changes go live as you type">Live</span>
+          </div>
+          <p class="page-sub">Change a value, and the game changes with it.</p>
+        </div>
+
+        <div class="editor" id="editor">
+          <div class="gutter" id="gutter" aria-hidden="true"></div>
+          <div class="code-area">
+            <pre class="highlight" id="highlight" aria-hidden="true"></pre>
+            <textarea
+              id="code"
+              class="code-input"
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="off"
+              autocorrect="off"
+              wrap="off"
+              aria-label="Game code"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+
+        <div class="toolbox">
+          <div class="toolbox-title">Colors<span class="toolbox-hint">click a color line, then pick one</span></div>
+          <div class="palette" id="palette"></div>
+
+          <details class="reference">
+            <summary>What can I change?</summary>
+            <ul id="reference-list"></ul>
+          </details>
+        </div>
+      </section>
+
+      <div class="divider" id="divider" role="separator" aria-orientation="vertical" title="Drag to resize"></div>
+
+      <!-- Right: the running game -->
+      <section class="game-pane" aria-label="Game">
+        <div class="game-frame-wrap">
+          <iframe id="game-frame" src="game.html" title="Digit span game" allow="autoplay"></iframe>
+        </div>
+        <p class="game-hint">Click inside the game to type your answers.</p>
+      </section>
+    </main>
+
+    <script src="studio-schema.js"></script>
+    <script src="studio.js"></script>
+  </body>
+</html>

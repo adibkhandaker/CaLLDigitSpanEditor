@@ -1,0 +1,111 @@
+<svg width="100" height="100" viewBox="100, 150, 300, 10" overflow="visible" >
+  
+ <g id="cookie1" class="animatable">
+  <ellipse 
+           id="cookieBase1 "
+           cx="250" cy="250" rx="20" ry="20" fill="#f5dba4" stroke="#b08c6b" stroke-width="2"
+   />
+   
+     <ellipse 
+           id="chip1a" 
+           cx="251" cy="252" rx="2" ry="2" fill="#594839" 
+   />
+       <ellipse 
+           id="chip1b" 
+           cx="244" cy="245" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip1c" 
+           cx="259" cy="242" rx="2" ry="2" fill="#594839" 
+   />
+        <ellipse 
+           id="chip1d" 
+           cx="241" cy="259" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip1e" 
+           cx="245" cy="237" rx="2" ry="2" fill="#594839" 
+   />
+            <ellipse 
+           id="chip1f" 
+           cx="259" cy="261" rx="2" ry="2" fill="#594839" 
+   />
+
+
+   </g> //cookie1
+  
+  
+   
+ <g id="cookie2"  class="animatable"> 
+  <ellipse 
+           id="cookieBase2" 
+           cx="280" cy="280" rx="20" ry="20" fill="#f5dba4" stroke="#b08c6b" stroke-width="2"
+   />
+   
+     <ellipse 
+           id="chip2a"
+           cx="281" cy="282" rx="2" ry="2" fill="#594839" 
+   />
+       <ellipse 
+           id="chip2b" 
+           cx="274" cy="275" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip2c" 
+           cx="289" cy="272" rx="2" ry="2" fill="#594839" 
+   />
+        <ellipse 
+           id="chip2d"
+           cx="271" cy="289" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip2e" 
+           cx="275" cy="267" rx="2" ry="2" fill="#594839" 
+   />
+            <ellipse 
+           id="chip2f" class="animatable"
+           cx="289" cy="291" rx="2" ry="2" fill="#594839" 
+   />
+
+
+   </g> //cookie3
+  
+  <g id="cookie3"  class="animatable">
+  <ellipse 
+           id="cookieBase3" class="animatable"
+           cx="220" cy="280" rx="20" ry="20" fill="#f5dba4" stroke="#b08c6b" stroke-width="2"
+   />
+   
+     <ellipse 
+           id="chip3a"
+           cx="221" cy="282" rx="2" ry="2" fill="#594839" 
+   />
+       <ellipse 
+           id="chip3b"
+           cx="214" cy="275" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip3c"
+           cx="229" cy="272" rx="2" ry="2" fill="#594839" 
+   />
+        <ellipse 
+           id="chip3d"
+           cx="221" cy="289" rx="2" ry="2" fill="#594839" 
+   />
+   
+          <ellipse 
+           id="chip3e"
+           cx="215" cy="267" rx="2" ry="2" fill="#594839"  
+   />
+            <ellipse 
+           id="chip3f"
+           cx="212" cy="288" rx="2" ry="2" fill="#594839"  
+   />
+
+
+   </g> //cookie3

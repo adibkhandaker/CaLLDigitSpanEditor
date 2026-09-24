@@ -1,0 +1,77 @@
+/* Studio overrides: every editable setting is a CSS variable set by studio-bridge.js.
+   Defaults match the original forward digit span look. */
+
+:root {
+  --monster-name: "Cortex";
+  --monster-color: #e7a562;
+  --monster-outline: color-mix(in srgb, var(--monster-color) 62%, black);
+  --monster-size: 1;
+  --hat-color: #a562e7;
+  --pompom-color: #62e7a5;
+  --eye-color: white;
+  --pupil-color: #4f4747;
+  --tongue-color: #ff5858;
+
+  --number-color: black;
+  --number-size: 100px;
+
+  --button-color: #a6a6a6;
+  --button-text-color: #f0f0f0;
+
+  --wall-color: rgb(247, 237, 227);
+  --kitchen-visibility: visible;
+}
+
+/* Monster name appears wherever the game text has <span class="monster-name"> */
+.monster-name::after {
+  content: var(--monster-name);
+}
+
+/* Monster body parts. The legs' ids in monster.svg are malformed, so target by group. */
+#monster_body,
+#monster_arms ellipse,
+#monster_R_leg_foot ellipse,
+#monster_L_leg_foot ellipse {
+  fill: var(--monster-color);
+  stroke: var(--monster-outline);
+}
+
+#party_hat { fill: var(--hat-color); }
+#pom_pom { fill: var(--pompom-color); }
+#monster_left_eye,
+#monster_right_eye { fill: var(--eye-color); }
+#pupils ellipse { fill: var(--pupil-color); }
+#monster_tongue { fill: var(--tongue-color); }
+
+/* Size scales the whole monster + cookies + score column */
+#monster-cookies-score {
+  width: calc(var(--monsterWidth) * var(--monster-size));
+  flex-basis: calc(var(--monsterWidth) * var(--monster-size));
+}
+
+.digits {
+  color: var(--number-color);
+  font-size: var(--number-size);
+}
+
+.num-button {
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+}
+.num-button:hover {
+  background-color: color-mix(in srgb, var(--button-color) 85%, black);
+}
+.num-button:active,
+.num-button.active-key {
+  background-color: color-mix(in srgb, var(--button-color) 90%, black) !important;
+  color: var(--button-text-color) !important;
+}
+
+body {
+  background-color: var(--wall-color);
+  transition: background-color 0.3s ease;
+}
+
+#kitchen {
+  visibility: var(--kitchen-visibility);
+}

@@ -1,0 +1,1274 @@
+:root {
+  --mouthOpen: 1s;
+  --bounceHeight: -100px;
+  --lastScale: 1;
+  --newScale: 1.2;
+  --lastMonsterY: 0px;
+  --newMonsterY: -20px;
+
+  /* Cookie drop positions */
+  --cookie1X: 0px;
+  --cookie1StartY: -80px;
+  --cookie1EndY: 120px;
+
+  --cookie2X: 0px;
+  --cookie2StartY: -80px;
+  --cookie2EndY: 120px;
+
+  --cookie3X: 0px;
+  --cookie3StartY: -80px;
+  --cookie3EndY: 120px;
+
+  --cookieXOffset: 55px;
+
+  --cookie1StackX: 0px;
+  --cookie1StackY: 0px;
+
+  --cookie2StackX: -10px;
+  --cookie2StackY: -4px;
+
+  --cookie3StackX: -10px;
+  --cookie3StackY: -4px;
+
+  /* Monster/kitchen responsive layout */
+  --sceneHeight: 40vh;
+  --monsterWidth: clamp(150px, 20vw, 300px);
+  --kitchenWidth: 30vw;
+  --sceneOverlap: 1.6vw;  
+  --pagePadding: clamp(16px, 3vw, 32px);
+
+  /* Keypad responsive layout */
+  --keySize: clamp(56px, 8vh, 80px);
+  --keyGap: clamp(7px, 1vh, 11px);
+
+  /* CSS-only responsive kitchen floor */
+  --floor-height: clamp(90px, 13vh, 185px);
+  --floor-fill: rgba(242, 228, 214, 0.82);
+
+  /* Warm beige-brown tile lines */
+  --floor-line-color: rgba(145, 103, 68, 0.24);
+
+  --floor-tile-width: clamp(72px, 7vw, 150px);
+  --floor-tile-height: clamp(38px, 5vh, 82px);
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background-color: rgb(247, 237, 227);
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+
+.floor-plane {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: var(--floor-height);
+  background: var(--floor-fill);
+
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  contain: paint;
+
+  perspective: 620px;
+  perspective-origin: 50% 0%;
+}
+
+/* CSS-only perspective tile grid */
+.floor-plane::before {
+  content: "";
+  position: absolute;
+
+  left: 50%;
+  bottom: -34px;
+
+  width: 170vw;
+  height: 420px;
+
+  transform: translateX(-50%) rotateX(68deg);
+  transform-origin: bottom center;
+
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--floor-line-color) 0,
+      var(--floor-line-color) 1.5px,
+      transparent 1.5px,
+      transparent var(--floor-tile-width)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--floor-line-color) 0,
+      var(--floor-line-color) 1.5px,
+      transparent 1.5px,
+      transparent var(--floor-tile-height)
+    );
+
+  background-position: center bottom;
+  background-size: auto;
+}
+
+/* Important: remove the old X/diagonal guide lines */
+.floor-plane::after {
+  content: none;
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100vw;
+  height: 100svh;
+  box-sizing: border-box;
+  padding: var(--pagePadding);
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+
+  position: relative;
+  z-index: 10;
+}
+
+/* jsPsych content sits on top */
+#jspsych-target {
+  width: min(680px, 100%);
+  min-width: 0;
+  min-height: 0;
+  z-index: 20;
+  overflow: visible;
+  position: relative;
+  pointer-events: auto;
+}
+
+#jspsych-target button {
+  position: relative;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+#monster-kitchen {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  bottom: 0;
+  right: 0;
+  gap: 0;
+  height: var(--sceneHeight);
+  z-index: 5;
+  pointer-events: none;
+}
+
+#monster-kitchen *,
+#monster-container,
+#monster-container *,
+#kitchen,
+#cookies-container,
+#cookies-container *,
+.floor-plane,
+.floor-plane * {
+  pointer-events: none;
+}
+
+#kitchen {
+  background-image: url("public/image/digit_span_kitchen.png");
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  height: var(--sceneHeight);
+  width: var(--kitchenWidth);
+  flex: 0 0 var(--kitchenWidth);
+  z-index: 0;
+  opacity: 0.8;
+}
+
+#monster-cookies-score {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--monsterWidth);
+  flex: 0 0 var(--monsterWidth);
+  margin-bottom: 1vh;
+  margin-right: calc(-1 * var(--sceneOverlap));
+  overflow: visible;
+}
+
+#monster-container {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+  overflow: visible;
+}
+
+#monster-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+#cookies-container {
+  position: absolute;
+  left: 50%;
+  top: -25%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 70%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+#cookies-container svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+@media (max-width: 900px), (max-height: 700px) {
+  :root {
+    --sceneHeight: clamp(110px, 24vh, 220px);
+    --monsterWidth: clamp(100px, 22vw, 190px);
+    --kitchenWidth: clamp(135px, 34vw, 290px);
+    --sceneOverlap: clamp(8px, 2vw, 24px);
+
+    --keySize: clamp(56px, 9vh, 82px);
+    --keyGap: clamp(7px, 1.2vh, 11px);
+  }
+
+  #wrapper {
+    padding-top: clamp(20px, 4vh, 48px);
+    padding-bottom: calc(var(--sceneHeight) + clamp(16px, 4vh, 32px));
+    justify-content: center;
+  }
+
+  .instruction-text {
+    font-size: clamp(15px, 2.4vw, 18px);
+    margin-bottom: 12px;
+  }
+
+  .current-answer-label {
+    font-size: 13px;
+  }
+
+  #echoed_txt {
+    font-size: 20px;
+    min-height: 28px;
+  }
+}
+
+#score-display {
+  display: flex;
+  font-family: monospace;
+  background: rgba(247, 237, 227);
+  color: #a562e7;
+  font-size: clamp(8px, 1.3vw, 20px); 
+  border-radius: 5px;
+  box-shadow: 0 0 8px #a562e7;
+  white-space: nowrap;
+  visibility: hidden;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5vw;
+
+  width: 9vw;
+  max-width: 120px;
+  height: 3.2vh;
+
+}
+
+
+
+/*figured these out with ChatGPT*/
+#all_mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#monster_tongue {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#all_eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#monster_left_arm {
+  transform-box: fill-box;
+  transform-origin: middle center;
+}
+#monster_right_arm {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+
+#all_but_legs {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+#monster_R_leg_foot {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+#monster_L_leg_foot {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+#monster_arms {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+#pupils {
+  transform-box: fill-box;
+  transform-origin: top left;
+}
+#cookie1 {
+  transform-box: fill-box;
+  transform-origin: top right;
+  opacity: 0;
+}
+
+#cookie2 {
+  transform-box: fill-box;
+  transform-origin: top center;
+  opacity: 0;
+}
+
+#cookie3 {
+  transform-box: fill-box;
+  transform-origin: top center;
+  opacity: 0;
+}
+#monster_mouth {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+#monster_full {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+
+.blink {
+animation: blinkAnim 2.4s infinite ease;
+}
+
+@keyframes blinkAnim {
+    0% {transform: scaleY(1);}
+    5% {transform: scaleY(0.2);}
+    7% {transform: scaleY(1);}
+    100% {transform: scaleY(1);}
+}
+
+.closeMouth {
+animation: closeMouthAnim 2s infinite ease-in-out;
+}
+
+@keyframes closeMouthAnim {
+    0% {transform: scaleY(1);}
+    5% {transform: scaleY(0.2);}
+    7% {transform: scaleY(1);}
+    100% {transform: scaleY(1);}
+}
+
+
+.grow {
+    animation: growAnim 1s ease forwards, rainbowFlash 1s 1; 
+}
+
+@keyframes growAnim {
+     0% {
+       transform: scale(var(--lastScale));
+        filter: brightness(1) drop-shadow(0 0 0px rgba(255, 200, 0, 0));
+    }
+    50% {
+      filter: brightness(1.1) drop-shadow(0 0 20px rgba(250, 200, 60, 0.9));
+    }
+     100% {
+        transform: scale(var(--newScale));
+        filter: brightness(1) drop-shadow(0 0 0px rgba(255, 200, 0, 0));
+
+
+    }
+
+}
+
+.rainbowFlash {
+  animation: rainbowFlashAnim 1s ease infinite; 
+}
+
+@keyframes rainbowFlashAnim {
+    0%   { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.preBounce {
+    animation: preBounceAnim 1.5s ease;
+}
+
+@keyframes preBounceAnim {
+    0% {
+        transform: translate(0px, 0px)
+    }
+     15% {
+        transform: translate(0px, 20px)
+    }
+     30% {
+        transform: translate(0px, 0px)
+    }
+     80% {
+        transform: translate(0px, 0px)
+    }
+      85% {
+        transform: translate(0px, 5px)
+    }
+       95% {
+        transform: translate(0px, 10px)
+    }
+    100% {
+        transform: translate(0px, 0px)
+    }
+    
+}
+
+.bounce {
+    animation: bounceAnim 1.5s ease;
+}
+
+@keyframes bounceAnim {
+    0% {
+        transform: translate(0px, 0px)
+    }
+     20% {
+        transform: translate(0px, 0px)
+    }
+       60% {
+        transform: translate(0px, var(--bounceHeight) )
+    }
+    100% {
+        transform: translate(0px, 0px)
+    }
+}
+
+.speakMouth{
+    animation: speakMouthAnim 1s ease;
+    
+}
+
+@keyframes speakMouthAnim {
+    0% {
+       transform: scale(1);
+    }
+     25% {
+       transform: scale(1.2) rotate(5deg);
+    }
+    55% {
+       transform: scale(0.5) rotate(-5deg);
+    }
+    75% {
+       transform: scale(1) rotate(-5deg);
+    }
+     100% {
+        transform: scale(1);
+    }
+}
+
+.eatMouth{
+    animation: eatMouthAnim var(--mouthOpen) ease-in-out;
+    
+}
+
+@keyframes eatMouthAnim {
+  0% {transform: scale(1);}
+  20% {transform: scale(1.6);}
+  70% {transform: scale(1.6);}
+  85% {transform: scaleX(0.5) scaleY(0.2);}
+  90% {transform: scale(1);}
+}
+
+.leftWave{
+    animation: leftWaveAnim 2.5s  1 ease-in-out;
+    
+}
+
+@keyframes leftWaveAnim {
+    0% {
+       transform: rotate(0deg);
+    }
+      30% {
+       transform: rotate(85deg);
+    }
+     35% {
+        transform: rotate(65deg);
+    }
+      40% {
+       transform: rotate(85deg);
+    }
+     45% {
+        transform: rotate(65deg);
+    }
+      50% {
+       transform: rotate(85deg);
+    }
+     55% {
+        transform: rotate(65deg);
+    }
+   60% {
+       transform: rotate(85deg);
+    }
+     65% {
+        transform: rotate(65deg);
+    }
+    100% {
+       transform: rotate(0deg);
+    }
+}
+
+.rightArmDrop{
+    animation: rightArmDropAnim 2.5s 1 ;
+    
+}
+
+@keyframes rightArmDropAnim {
+    0% {
+       transform: rotate(0deg);
+    }
+     10% {
+       transform: rotate(70deg) translate(-40px, 20px);
+    }
+    80% {
+       transform: rotate(70deg) translate(-40px, 20px);
+    }
+    100% {
+       transform: rotate(0deg);
+    }
+
+  }
+
+.ambientBodyMovement{
+  animation: ambientBodyMovementAnim 8s ease-in-out infinite;
+}
+
+@keyframes ambientBodyMovementAnim {
+    0% {transform: rotate(0deg); }
+    10% {transform: rotate(0.5deg); }
+    25% {transform: rotate(0deg); }
+    60% {transform: rotate(0deg); }
+    75% {transform: rotate(-0.5deg); }
+    90% {transform: rotate(0deg); }
+    100% {transform: rotate(0deg); }
+  }
+
+  .ambientRLegMovement{
+  animation: ambientRLegMovementAnim 8s ease-in-out infinite;
+}
+
+@keyframes ambientRLegMovementAnim {
+    0% {transform: translateY(0px); }
+    60% {transform: translateY(0px); }
+    75% {transform: translateY(-5px); }
+    90% {transform: translateY(0px); }
+  }
+
+  .ambientLLegMovement{
+  animation: ambientLLegMovementAnim 8s ease-in-out infinite;
+}
+
+@keyframes ambientLLegMovementAnim {
+    0% {transform: translateY(0px); }
+    10% {transform: translateY(-5px); }
+    25% {transform: translateY(0px); }
+  }
+
+
+  .ambientRArmMovement{
+  animation: ambientRArmMovementAnim 7s ease-in-out infinite;
+  
+}
+
+@keyframes ambientRArmMovementAnim {
+    0% {transform: rotate(0deg); }
+    30% {transform: rotate(2deg) }
+    40% {transform: rotate(0deg); }
+  }
+
+  .ambientLArmMovement{
+  animation: ambientLArmMovementAnim 6s ease-in-out infinite;
+}
+
+@keyframes ambientLArmMovementAnim {
+    0% {transform: rotate(0deg); }
+    60% {transform: rotate(-2deg) }
+    70% {transform: rotate(0deg); }
+  }
+
+
+/* We'd have to check if this will work in Gorilla, but it would 
+be fun to make it so the eyes automatically track the cursor*/ 
+.lookUp{
+  animation: lookUpAnim 3s forwards;
+}
+  @keyframes lookUpAnim {
+    0% {transform: translate(0px, 0px); }
+    20% {transform: translate(-6px,-6px); }
+    85% {transform: translate(-6px,-6px); }
+    100% {transform: translate(0px, 0px); }
+  }
+
+.cookie1Drop {
+  animation: cookie1DropAnim 1s ease-in forwards;
+}
+
+@keyframes cookie1DropAnim {
+  0% {
+    transform: translate(
+      calc(var(--cookie1X) + var(--cookieXOffset) + var(--cookie1StackX)),
+      calc(var(--cookie1StartY) + var(--cookie1StackY))
+    );
+    opacity: 1;
+  }
+
+  75% {
+    transform: translate(
+      calc(var(--cookie1X) + var(--cookieXOffset) + var(--cookie1StackX)),
+      calc(var(--cookie1EndY) + var(--cookie1StackY))
+    );
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    transform: translate(
+      calc(var(--cookie1X) + var(--cookieXOffset) + var(--cookie1StackX)),
+      calc(var(--cookie1EndY) + var(--cookie1StackY))
+    );
+    opacity: 0;
+  }
+}
+
+.cookie2Drop {
+  animation: cookie2DropAnim 1s ease-in forwards;
+}
+
+@keyframes cookie2DropAnim {
+  0% {
+    transform: translate(
+      calc(var(--cookie2X) + var(--cookieXOffset) + var(--cookie2StackX)),
+      calc(var(--cookie2StartY) + var(--cookie2StackY))
+    );
+    opacity: 1;
+  }
+
+  75% {
+    transform: translate(
+      calc(var(--cookie2X) + var(--cookieXOffset) + var(--cookie2StackX)),
+      calc(var(--cookie2EndY) + var(--cookie2StackY))
+    );
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    transform: translate(
+      calc(var(--cookie2X) + var(--cookieXOffset) + var(--cookie2StackX)),
+      calc(var(--cookie2EndY) + var(--cookie2StackY))
+    );
+    opacity: 0;
+  }
+}
+
+.cookie3Drop {
+  animation: cookie3DropAnim 1s ease-in forwards;
+}
+
+@keyframes cookie3DropAnim {
+  0% {
+    transform: translate(
+      calc(var(--cookie3X) + var(--cookieXOffset) + var(--cookie3StackX)),
+      calc(var(--cookie3StartY) + var(--cookie3StackY))
+    );
+    opacity: 1;
+  }
+
+  75% {
+    transform: translate(
+      calc(var(--cookie3X) + var(--cookieXOffset) + var(--cookie3StackX)),
+      calc(var(--cookie3EndY) + var(--cookie3StackY))
+    );
+    opacity: 1;
+  }
+
+  80%,
+  100% {
+    transform: translate(
+      calc(var(--cookie3X) + var(--cookieXOffset) + var(--cookie3StackX)),
+      calc(var(--cookie3EndY) + var(--cookie3StackY))
+    );
+    opacity: 0;
+  }
+}
+.smile{
+   animation: smileAnim 2s forwards;
+}
+
+@keyframes smileAnim {
+   0% {clip-path: ellipse(25px 18px at 50% 50%);}
+   20% {clip-path: ellipse(25px 12px at 50% 65%);}
+   80% {clip-path: ellipse(25px 12px at 50% 65%); }
+   100% {clip-path: ellipse(25px 18px at 50% 50%); }
+  }
+
+.rankUpButton {
+  animation: rankUpButtonAnim 1s ease-in-out;
+}
+
+@keyframes rankUpButtonAnim {
+   0% {
+    transform: scale(1);
+     box-shadow: 0 0 8px #a562e7;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px #feeb3a;
+  }
+  100% {
+    transform: scale(1);
+     box-shadow: 0 0 8px #a562e7;
+  }
+}
+
+.danceBody {
+  animation: danceBodyAnim 1.5s 6 forwards;
+}
+
+@keyframes danceBodyAnim {
+  0% {transform: rotate(0deg) scale(var(--lastScale));}
+   25% {transform: translateY(-5px) rotate(10deg);}
+   50% {transform: translateY(5px) rotate(-15deg);}
+   75% {transform: rotate(10deg);}
+   100% {transform: rotate(0deg) scale(var(--lastScale));}  
+}
+
+.waveArms {
+  animation: waveArmsAnim 3s 3;
+}
+
+@keyframes waveArmsAnim {
+  0% {transform: rotate(0deg);}
+   25% {transform: rotate(20deg);}
+   50% {transform: translateY(10px) rotate(-15deg);}
+   75% {transform: rotate(40deg);}
+   100% {transform: rotate(0deg);}  
+}
+
+  /**********************************************/
+
+/* normal paragraph styling */
+p {
+  font-size: 20px;
+  line-height: 1.6;
+  margin: 20px 0;
+}
+
+h1 {
+  font-size: 40px;
+  font-family: Rockwell, serif;
+  line-height: 1.4;
+  margin: 20px 0;
+  color: #a562e7;
+  font-weight: bold;
+  text-shadow: 0.5px 2px #12091ba2; 
+}
+
+.digits {
+font-size: 100px;
+font-weight: 600;
+line-height: 2;
+color: black;
+}
+
+.digits-feedback {
+  font-size: 50px;
+font-weight: 600;
+line-height: 2;
+}
+
+
+/* Hide jsPsych's built-in progress bar */
+#jspsych-progressbar-container {
+  display: none !important;
+}
+
+
+/* Progress bar — fixed at top, full width with margin */
+#progress-group {
+  position: fixed;
+  top: 16px;
+  left: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+/* Segmented progress bar — row of squares */
+#progress-track {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 3px;
+}
+
+.progress-segment {
+  flex: 1;
+  height: 14px;
+  border-radius: 2px;
+  background-color: rgba(171, 87, 194, 0.22);
+  transition: background-color 0.35s ease;
+}
+
+.progress-segment.completed {
+  background-color:  rgba(171, 87, 194, 1);
+}
+
+/* Percentage + count label to right of bar */
+/* #progress-stats {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b0b4bc;
+  white-space: nowrap;
+} */
+
+.response-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* The instruction text */
+.instruction-text {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+  color: black;
+  font-weight: normal;
+}
+
+.instruction-text b {
+  color: #a562e7;
+  font-weight: bold;
+}
+
+/* Number button grid — fixed to match button sizes */
+.numbox {
+  display: grid;
+  grid-template-columns: repeat(3, var(--keySize));
+  gap: var(--keyGap);
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 12px auto;
+}
+
+/* Style for number buttons */
+.num-button {
+  box-sizing: border-box;
+  width: var(--keySize);
+  height: var(--keySize);
+  padding: 0; /* override the global button padding so the key stays exactly --keySize */
+  font-size: calc(var(--keySize) * 0.5);
+  font-weight: bold;
+  background-color: #a6a6a6;
+  color: #f0f0f0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Button hover effect */
+.num-button:hover {
+  background-color: #8a8a8a;
+}
+
+/* Button active/press effect */
+.num-button:active,
+.num-button.active-key {
+  transform: scale(0.95);
+  background-color: #919191 !important;
+  color: #f0f0f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for clear button — width matches half of the 3-column grid */
+.clear_button {
+  width: calc((3 * var(--keySize) + 2 * var(--keyGap) - 10px) / 2);
+  background-color: #b34040;
+  color: #f0f0f0;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 14px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  margin: 0 auto 16px auto;
+  display: block;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover effect for clear button */
+.clear_button:hover {
+  background-color: #963333;
+}
+
+.clear_button:active,
+.clear_button.active-key {
+  background-color: #d06060 !important;
+  transform: scale(0.97);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+.submit_button {
+  width: calc((3 * var(--keySize) + 2 * var(--keyGap) - 10px) / 2);
+  background-color: #40b36c;
+  color: #f0f0f0;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 14px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  margin: 0 auto 16px auto;
+  display: block;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover effect for clear button */
+.submit_button:hover {
+  background-color: #349057;
+}
+
+.submit_button:active,
+.submit_button.active-key {
+  background-color: #4fd482 !important;
+  transform: scale(0.97);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Labels above the answer display */
+.current-answer-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: darkgray;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Response output area — pre-allocated height prevents layout shift */
+#echoed_txt {
+  font-size: 24px;
+  font-weight: bold;
+  color: #646464;
+  min-height: 36px;
+  line-height: 1.5;
+}
+
+/* Scoreboard on results screen */
+.scoreboard {
+  width: 20vw;
+  max-width: 300px;
+  height: auto;
+  background-color: #62e7a461;
+  border: 2px solid #62e7a5;
+  box-shadow: 5px 5px 10px grey;
+  padding: 20px;
+  border-radius: 12px;
+  text-align:  left;
+  margin: 20px auto;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  
+}
+
+.scoreline {
+  width: 20vw;
+   max-width: 300px;
+
+  height: 3rem;
+  /* background-color: #62e7a461; */
+  /* border: 2px solid #62e7a400; */
+  box-shadow: 2px 5px 5px #6384734b, 2px -2px 5px #aab6b04b;
+  border-radius: 5px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.scoreline p {
+  font-size: clamp(5px, 1vw, 14px);
+  font-family: monospace;
+  overflow: visible;
+}
+
+.stat-score {
+  color: #a562e7;
+  font-size: clamp(5px, 1vw, 14px);
+  margin-left: auto;
+}
+
+.time-score {
+  color: #c9a227;
+  font-weight: bold;
+}
+
+.final-score {
+  color: #d97040;
+  font-weight: bold;
+}
+
+/* General Button Styling */
+button {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+/* Primary Buttons */
+.jspsych-btn {
+  background-color: #3a6fc9;
+  color: #f0f0f0;
+  border-radius: 10px;
+  min-width: 140px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.jspsych-btn:hover {
+  background-color: #cdcdcd;
+}
+
+.jspsych-btn:active,
+.jspsych-btn.active-key {
+  transform: scale(0.97);
+  background-color: #cdcdcd !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+
+
+/* Welcome Screen */
+.welcome-container {
+  text-align: center;
+  max-width: 660px;
+  margin: auto;
+}
+
+.practice-chip {
+  background: #c9a227;
+  color: #141518;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+}
+
+/* Fade-In Effect */
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide-Up Effect */
+.slideUp {
+  animation: slideUpAnim 2s ease-in 1;
+}
+
+@keyframes slideUpAnim {
+0% {transform: translateY(100px); opacity: 0;}
+70% {transform: translateY(100px); opacity: 0;}
+100% {transform: translateY(0px); opacity:1;}
+}
+
+.slideIn {
+  animation: slideInAnim 2s ease-in forwards;
+}
+
+@keyframes slideInAnim{
+  from {transform: translateY(20vw); opacity: 0;}
+  to {transform: translateX(0vw); opacity: 1;}
+}
+
+.general-btn {
+  font-weight:normal;
+  font-family: monospace;
+  font-size: 18px;
+  background-color: #e5e5e5;
+  color: #3a3a3a;
+  border-radius: 10px;
+  min-width: 140px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+   padding: 8px 10px;
+
+}
+
+.next-btn:hover {
+  background-color: #cdcdcd;
+  transform: translateY(-2px);
+}
+
+.hello-btn {
+  font-family: 'Rockwell', serif;
+  font-weight: normal;
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  color: #4F4747;
+  border: 2px solid #AA6A26;
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hello-btn:hover {
+  background-color: #e4e3e3;
+  transform: translateY(-2px);
+}
+
+.hello-btn2 {
+  font-family: 'Rockwell', serif;
+  font-weight: normal;
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #e4e3e3;
+  color: #4F4747;
+  border: 2px solid #AA6A26;
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+/* .hello-btn2:hover {
+  background-color: #cdcdcd;
+  transform: scale(0.97);
+  transform: translateY(-2px);
+} */
+
+
+/* Score update effect */
+.score-update-effect {
+  animation: scorePop 1s ease-in-out;
+}
+
+@keyframes scorePop {
+  0% {
+    transform: scale(1);
+     box-shadow: 0 0 8px #a562e7;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px #6c02d7;
+  }
+  100% {
+    transform: scale(1);
+     box-shadow: 0 0 8px #a562e7;
+  }
+}
+
+/* Individual bouncing digits */
+.bounce-letter {
+  display: inline-block;
+  animation: bounceUpDown 1s ease-in-out 2;
+}
+
+@keyframes bounceUpDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.headerAnim {
+  animation: headerAnim 2s 1 forwards;
+}
+
+@keyframes headerAnim {
+
+0% {opacity: 0;}
+100% {opacity: 1; }
+
+}
+
+.buttonRise {
+  animation: buttonRiseAnim 2.5s 1 forwards;
+}
+
+@keyframes buttonRiseAnim {
+
+0% {transform: translateY(100px); opacity: 0;}
+80% {transform: translateY(100px); opacity: 0;}
+100% {transform: translateY(0px); opacity:1;}
+}
